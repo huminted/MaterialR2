@@ -1,12 +1,55 @@
-This is a Kotlin Multiplatform project targeting Desktop (JVM).
+# MaterialR2
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-    - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-      the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-      Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-      folder is the appropriate location.
+MaterialR2 is a modern R2 cloud storage client application built with Material Design 3 principles. Developed using
+Kotlin and Jetpack Compose for Desktop, it provides an elegant and feature-rich interface for managing R2 cloud storage
+services.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Key Features
+
+- 🎨 Material Design 3 Implementation
+- 📱 Modern Desktop User Interface
+- 🚀 Fast File Upload & Management
+- 📂 Powerful Bucket Management
+- ⚙️ Intuitive Configuration Interface
+- 🔐 Secure API Credentials Management
+
+## Tech Stack
+
+- Kotlin
+- Jetpack Compose for Desktop
+- Material 3 Components
+- R2 SDK
+- Kotlin Coroutines
+- MVVM Architecture
+
+## Requirements
+
+- Java 17+
+- Kotlin 2.2+
+
+## Features in Development
+
+- [ ] Multi-account Support
+- [ ] File Preview Functionality
+- [ ] Batch Operations Enhancement
+- [ ] Transfer Queue Management
+- [ ] Dark Theme Support
+
+## Getting Started
+
+1. Clone the repository
+2. Set up your R2 API credentials
+3. Build and run the application
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Built with JetBrains Compose for Desktop
+- Powered by R2 Cloud Storage
