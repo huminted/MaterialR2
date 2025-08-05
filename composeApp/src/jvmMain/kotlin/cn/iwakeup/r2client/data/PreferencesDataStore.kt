@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import cn.iwakeup.r2client.APP_NAME
 import okio.Path.Companion.toPath
 import java.io.File
+import java.io.IOException
 
 internal const val dataStoreFileName = "material_r2.preferences_pb"
 
@@ -34,7 +35,9 @@ private fun getDataStoreFile(): File {
         }
     }
 
-    appSupportDir.mkdirs()
+    if (!appSupportDir.exists() && !appSupportDir.mkdirs()) {
+        throw IOException("Failed to create app support directory at: $appSupportDir")
+    }
 
     return appSupportDir
 

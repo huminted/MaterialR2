@@ -49,9 +49,15 @@ compose.desktop {
         mainClass = "cn.iwakeup.r2client.MainKt"
 
         nativeDistributions {
+
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "cn.iwakeup.r2client"
-            packageVersion = "1.0.0"
+            packageName = "MR2"
+            packageVersion = "1.0.1"
+            modules("java.instrument", "java.management", "jdk.unsupported", "java.naming")
+
+            macOS {
+                buildTypes.release { proguard { isEnabled = false } }
+            }
         }
     }
 }
