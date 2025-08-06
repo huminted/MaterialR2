@@ -37,7 +37,7 @@ fun NavigationRailComponent(
 
     val alpha by animateFloatAsState(
         targetValue = if (isExpanded) 1f else 0f,
-        animationSpec = tween(durationMillis = 500), // 可调动画时间
+        animationSpec = tween(durationMillis = 500),
         label = "alphaAnimation"
     )
 
@@ -82,7 +82,11 @@ fun NavigationRailComponent(
                 NavigationRailItem(
                     modifier = Modifier.defaultMinSize(minHeight = 80.dp).wrapContentSize(),
                     selected = navigationData.routeScreen == selectedPage,
-                    onClick = { onNavItemChange(navigationData.routeScreen) },
+                    onClick = {
+                        if (selectedPage != navigationData.routeScreen) {
+                            onNavItemChange(navigationData.routeScreen)
+                        }
+                    },
                     icon = {
                         Icon(
                             modifier = Modifier.size(20.dp),

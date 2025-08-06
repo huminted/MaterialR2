@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToDrive
 import androidx.compose.material.icons.filled.Bento
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,20 +61,18 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
         is AppWrapperUIState.Success -> {
 
             val buckets = (uiState as AppWrapperUIState.Success).buckets
-
-            MaterialTheme {
-                Row(modifier = Modifier.fillMaxSize()) {
-                    NavigationRailComponent(navigationItems, selectedPage) { it ->
-                        selectedPage = it
-                        navController.navigate(selectedPage)
-                    }
-                    NavHost(navController = navController, startDestination = Route.Upload) {
-                        composable<Route.Upload> { UploadRoute(buckets, uploadViewModel) }
-                        composable<Route.Bucket> { BucketRoute(buckets, bucketViewModel) }
-                        composable<Route.Setting> { SettingRoute(apiConfiguration, onSave) }
-                    }
+            Row(modifier = Modifier.fillMaxSize()) {
+                NavigationRailComponent(navigationItems, selectedPage) { it ->
+                    selectedPage = it
+                    navController.navigate(selectedPage)
+                }
+                NavHost(navController = navController, startDestination = Route.Upload) {
+                    composable<Route.Upload> { UploadRoute(buckets, uploadViewModel) }
+                    composable<Route.Bucket> { BucketRoute(buckets, bucketViewModel) }
+                    composable<Route.Setting> { SettingRoute(apiConfiguration, onSave) }
                 }
             }
+
         }
     }
 

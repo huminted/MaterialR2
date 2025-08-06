@@ -37,7 +37,7 @@ class BucketViewModel() : ViewModel() {
             val isLast = bucketFullInfo.index == bucketBasicList.lastIndex
 
             _uiState.update { current ->
-                current.copy(isLoading = !isLast, current.bucketFullInfoList + bucketFullInfo)
+                current.copy(isLoading = !isLast, bucketFullInfoList = current.bucketFullInfoList + bucketFullInfo)
             }
 
 

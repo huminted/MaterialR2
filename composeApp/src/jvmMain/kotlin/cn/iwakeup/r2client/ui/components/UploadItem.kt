@@ -7,7 +7,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FileCopy
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,11 +36,15 @@ fun UploadFileItem(
             DownloadProgressIndicator(uploadTask.process.value, uploadTask.status.value)
 
         }
-        IconButton(modifier = Modifier.weight(0.05f), onClick = {
-            onCopyLink?.invoke(file)
-        }, content = {
-            Icon(Icons.Default.FileCopy, "Close")
-        })
+        IconButton(
+            modifier = Modifier.weight(0.05f),
+            enabled = uploadTask.status.value == UploadTaskStatus.Finished,
+            onClick = {
+                onCopyLink?.invoke(file)
+            },
+            content = {
+                Icon(Icons.Default.Link, "Link")
+            })
         IconButton(modifier = Modifier.weight(0.05f), onClick = { onRemoveItem?.invoke(file) }, content = {
             Icon(Icons.Default.Close, "Close")
         })

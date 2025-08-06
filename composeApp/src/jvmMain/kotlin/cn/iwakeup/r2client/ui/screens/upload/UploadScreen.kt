@@ -1,5 +1,6 @@
 package cn.iwakeup.r2client.ui.screens.upload
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -39,7 +40,7 @@ fun UploadScreen(bucketBasicInfoList: List<BucketBasicInfo>, viewModel: UploadVi
                 viewModel.selectBucket(it)
             }) {
 
-                LazyColumn {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     items(fileList.size, {
                         fileList[it].hashCode()
                     }) {
