@@ -9,11 +9,11 @@ import java.net.URI
 
 object S3ClientBuilder {
 
-    class S3Config(accountId: String, val accessKey: String, val secretKey: String) {
+    class S3Config(val accountId: String, val accessKey: String, val secretKey: String) {
         val endpoint: String = String.format("https://%s.r2.cloudflarestorage.com", accountId)
     }
 
-     fun buildS3Client(config: S3Config): S3Client {
+    fun buildS3Client(config: S3Config): S3Client {
         val credentials = AwsBasicCredentials.create(
             config.accessKey,
             config.secretKey

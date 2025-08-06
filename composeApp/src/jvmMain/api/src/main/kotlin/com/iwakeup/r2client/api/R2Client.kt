@@ -47,7 +47,7 @@ class R2Client(private val s3Client: S3Client) {
                 objectList.addAll(response.contents())
 
                 continuationToken = if (response.isTruncated) response.nextContinuationToken() else null
-            } while (continuationToken != null)
+            } while (false)
 
 
             return objectList

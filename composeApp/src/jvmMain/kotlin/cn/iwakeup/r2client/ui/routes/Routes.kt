@@ -9,7 +9,7 @@ sealed class Route {
 
     @Serializable
     data class Splash(
-        val freshLaunch: Boolean,
+        val freshInitialization: Boolean,
         val accountId: String = "",
         val accessKey: String = "",
         val secretKey: String = ""

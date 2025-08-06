@@ -2,6 +2,7 @@ package cn.iwakeup.r2client.ui.screens.bucket
 
 import androidx.lifecycle.ViewModel
 import cn.iwakeup.r2client.data.BucketBasicInfo
+import cn.iwakeup.r2client.domain.SystemToolkit
 import com.iwakeup.r2client.api.R2Client
 import com.iwakeup.r2client.data.BucketFullInfo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +30,7 @@ class BucketViewModel() : ViewModel() {
         flow {
             bucketBasicList.forEachIndexed { index, bucket ->
                 val objectList = R2Client.get().listObjects(bucket.bucketName)
-                emit(BucketFullInfo(index, bucket.bucketName, bucket.createTime, objectList))
+                emit(BucketFullInfo(index, bucket.bucketName, bucket.createTime, objectList, bucket.publicURL))
             }
 
         }.collect { bucketFullInfo ->
@@ -42,6 +43,15 @@ class BucketViewModel() : ViewModel() {
 
 
         }
+    }
+
+
+    fun copyObjectLink(bucketFullInfo: BucketFullInfo, objectKey: String) {
+        SystemToolkit.copyObjectLink(bucketFullInfo, objectKey)
+    }
+
+    fun deleteObject(bucketFullInfo: BucketFullInfo, objectKey: String) {
+
     }
 
 

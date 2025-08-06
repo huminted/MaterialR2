@@ -35,3 +35,4 @@ plugins {
 include(":composeApp")
 
 include("composeApp:src:jvmMain:api")
+include("composeApp:src:jvmMain:composeResources")

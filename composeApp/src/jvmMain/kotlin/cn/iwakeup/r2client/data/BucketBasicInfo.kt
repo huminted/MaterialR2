@@ -3,4 +3,4 @@ package cn.iwakeup.r2client.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BucketBasicInfo(val bucketName: String, val createTime: String)
+data class BucketBasicInfo(val bucketName: String, val createTime: String, val publicURL: String?)

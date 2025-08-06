@@ -8,9 +8,9 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
+
 kotlin {
     jvm()
-
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -60,4 +60,17 @@ compose.desktop {
             }
         }
     }
+}
+
+compose.resources {
+
+
+    publicResClass = true
+    packageOfResClass = "cn.iwakeup.r2client.resource"
+    generateResClass = auto
+
+    customDirectory(
+        sourceSetName = "jvmMain",
+        directoryProvider = provider { layout.projectDirectory.dir("composeResources") }
+    )
 }

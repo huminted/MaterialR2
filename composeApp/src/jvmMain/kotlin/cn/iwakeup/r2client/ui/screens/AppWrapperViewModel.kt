@@ -3,9 +3,12 @@ package cn.iwakeup.r2client.ui.screens
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.iwakeup.r2client.data.BucketBasicInfo
+import cn.iwakeup.r2client.data.PreferenceRepository
+import cn.iwakeup.r2client.data.PreferencesDataStore
 import cn.iwakeup.r2client.toBasicInfo
 import com.iwakeup.r2client.api.R2Client
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +21,8 @@ sealed interface AppWrapperUIState {
 }
 
 class AppWrapperViewModel : ViewModel() {
-
-
+    val preferenceRepository = PreferenceRepository(PreferencesDataStore.instance)
+    
     private val _uiStat = MutableStateFlow<AppWrapperUIState>(AppWrapperUIState.Loading)
     val uiState: StateFlow<AppWrapperUIState> = _uiStat
 
@@ -27,9 +30,14 @@ class AppWrapperViewModel : ViewModel() {
     fun loadBuckets() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiStat.emit(AppWrapperUIState.Loading)
-            delay(3000)
-            val buckets = R2Client.get().listBuckets().map { it.toBasicInfo() }
-            _uiStat.emit(AppWrapperUIState.Success(buckets))
+            delay(1000)
+            val buckets = async { R2Client.get().listBuckets() }.await()
+            preferenceRepository.getBucketsPublicURL(buckets).collect { urls ->
+                val basicBuckets = buckets.mapIndexed { index, rawBucket ->
+                    rawBucket.toBasicInfo(urls[index])
+                }
+                _uiStat.emit(AppWrapperUIState.Success(basicBuckets))
+            }
         }
     }
 

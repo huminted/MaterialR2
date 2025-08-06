@@ -1,10 +1,8 @@
 package cn.iwakeup.r2client.ui.screens.upload
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Rocket
@@ -17,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cn.iwakeup.r2client.data.BucketBasicInfo
-import cn.iwakeup.r2client.ui.components.UploadFileItem
 import cn.iwakeup.r2client.ui.components.drop.DropComponent
 
 
@@ -39,22 +36,15 @@ fun UploadScreen(bucketBasicInfoList: List<BucketBasicInfo>, viewModel: UploadVi
             }, bucketBasicInfoList, selectedBucket!!, {
                 viewModel.selectBucket(it)
             }) {
-
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    items(fileList.size, {
-                        fileList[it].hashCode()
-                    }) {
-                        UploadFileItem(
-                            fileList[it],
-                            onCopyLink = { file ->
-                                viewModel.copyLink(file)
-                            },
-                            onRemoveItem = { file ->
-                                viewModel.removeFile(file)
-                            })
-                    }
-                }
-
+                UploadList(
+                    bucketHasPublicURL = { !selectedBucket?.publicURL.isNullOrEmpty() },
+                    fileList,
+                    onCopyLink = { file ->
+                        selectedBucket?.publicURL?.let { viewModel.copyLink(it, file.name) }
+                    },
+                    onRemoveItem = { file ->
+                        viewModel.removeFile(file)
+                    })
             }
 
             FloatingActionButton(

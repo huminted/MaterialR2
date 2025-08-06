@@ -26,7 +26,7 @@ fun App() {
         ) {
             composable<Route.Splash> {
                 val routeSplash: Route.Splash = it.toRoute()
-                SplashScreen(routeSplash.freshLaunch, routeSplash.toAPIConfiguration()) { appConfig ->
+                SplashScreen(routeSplash.freshInitialization, routeSplash.toAPIConfiguration()) { appConfig ->
                     navController.navigate(appConfig.apiConfiguration.toMainRoute())
                 }
 

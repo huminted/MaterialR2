@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.iwakeup.r2client.data.BucketBasicInfo
 import cn.iwakeup.r2client.data.UploadingJob
+import cn.iwakeup.r2client.domain.SystemToolkit
 import cn.iwakeup.r2client.stateOf
 import cn.iwakeup.r2client.toImmutable
 import cn.iwakeup.r2client.toUploadTask
@@ -60,10 +61,9 @@ class UploadViewModel : ViewModel() {
         }
     }
 
-    fun copyLink(file: File) {
+    fun copyLink(publicURL: String, objectKey: String) {
 
-        println(file)
-
+        SystemToolkit.copyObjectLink(publicURL, objectKey)
     }
 
     fun uploadToR2() {
@@ -77,7 +77,7 @@ class UploadViewModel : ViewModel() {
                     R2Client.get().uploadObject(
                         selectedBucket.value!!.bucketName, taskState.task,
                         {
-                            uploadingJobsMap.put(taskState.task.taskId, UploadingJob(null, it))
+                            uploadingJobsMap[taskState.task.taskId] = UploadingJob(null, it)
                         }, { taskId, progress ->
                             println("uploading progress${progress}")
                             if (taskState.status.value == UploadTaskStatus.Pending) {

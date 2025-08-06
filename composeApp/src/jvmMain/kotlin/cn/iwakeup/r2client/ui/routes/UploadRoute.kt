@@ -7,7 +7,5 @@ import cn.iwakeup.r2client.ui.screens.upload.UploadViewModel
 
 @Composable
 fun UploadRoute(bucketBasicInfoList: List<BucketBasicInfo>, uploadViewModel: UploadViewModel) {
-
-
     UploadScreen(bucketBasicInfoList, uploadViewModel)
 }

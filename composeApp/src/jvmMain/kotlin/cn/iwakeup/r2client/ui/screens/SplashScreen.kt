@@ -18,13 +18,14 @@ import cn.iwakeup.r2client.data.APIConfiguration
 import cn.iwakeup.r2client.data.AppConfig
 import cn.iwakeup.r2client.ui.SplashUIState
 import cn.iwakeup.r2client.ui.SplashViewModel
+import cn.iwakeup.r2client.ui.components.form.BucketConfigurationInitialForm
 import cn.iwakeup.r2client.ui.components.InitialLoadingIndicator
-import cn.iwakeup.r2client.ui.screens.setting.R2APIConfigurationForm
+import cn.iwakeup.r2client.ui.components.form.R2APIConfigurationForm
 
 
 @Composable
 fun SplashScreen(
-    freshLaunch: Boolean,
+    freshInitialization: Boolean,
     apiConfiguration: APIConfiguration, onInitiatedSuccess: (AppConfig) -> Unit
 ) {
     val splashViewModel = remember { SplashViewModel() }
@@ -36,11 +37,11 @@ fun SplashScreen(
     val appUIState by splashViewModel.splashUIState.collectAsStateWithLifecycle()
 
 
-    LaunchedEffect(freshLaunch) {
-        if (freshLaunch) {
+    LaunchedEffect(freshInitialization) {
+        if (freshInitialization) {
             splashViewModel.initR2ClientForFreshLaunch()
         } else {
-            splashViewModel.initR2Client(apiConfiguration)
+            splashViewModel.refreshR2ClientConfiguration(apiConfiguration)
         }
     }
 
@@ -54,7 +55,7 @@ fun SplashScreen(
         SplashUIState.FreshInstall -> {
             Column {
                 Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化设置")
-                ConfigurationForm(accountIdState, accessKeyState, secretKeyState) {
+                APIConfigurationForm(accountIdState, accessKeyState, secretKeyState) {
                     splashViewModel.saveAPIConfiguration(it)
                 }
             }
@@ -65,7 +66,7 @@ fun SplashScreen(
             val railReason = appUIState as SplashUIState.InitiatedFail
             Column {
                 Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化失败:${railReason.reason}")
-                ConfigurationForm(accountIdState, accessKeyState, secretKeyState) {
+                APIConfigurationForm(accountIdState, accessKeyState, secretKeyState) {
                     splashViewModel.saveAPIConfiguration(it)
                 }
             }
@@ -73,7 +74,14 @@ fun SplashScreen(
 
         is SplashUIState.InitiatedSuccess -> {
             val successState = appUIState as SplashUIState.InitiatedSuccess
-            onInitiatedSuccess(successState.appConfig)
+            if (successState.needSetupBucketPublicURL || !freshInitialization) {
+                BucketConfigurationInitialForm(Modifier.padding(20.dp), successState.appConfig.bucketList) {
+                    splashViewModel.saveBucketPublicURL(it)
+                    onInitiatedSuccess(successState.appConfig)
+                }
+            } else {
+                onInitiatedSuccess(successState.appConfig)
+            }
         }
 
     }
@@ -82,7 +90,7 @@ fun SplashScreen(
 }
 
 @Composable
-private fun ConfigurationForm(
+private fun APIConfigurationForm(
     accountIdState: TextFieldState,
     accessKeyState: TextFieldState,
     secretKeyState: TextFieldState,

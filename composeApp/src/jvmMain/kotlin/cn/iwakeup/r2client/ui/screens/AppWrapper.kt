@@ -69,7 +69,7 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
                 NavHost(navController = navController, startDestination = Route.Upload) {
                     composable<Route.Upload> { UploadRoute(buckets, uploadViewModel) }
                     composable<Route.Bucket> { BucketRoute(buckets, bucketViewModel) }
-                    composable<Route.Setting> { SettingRoute(apiConfiguration, onSave) }
+                    composable<Route.Setting> { SettingRoute(apiConfiguration, buckets, onSave) }
                 }
             }
 

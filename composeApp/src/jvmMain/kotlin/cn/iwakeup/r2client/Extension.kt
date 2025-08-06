@@ -27,8 +27,8 @@ fun UploadTask.stateOf(): UploadTaskUIState {
     return UploadTaskUIState(this, mutableStateOf(0.0), mutableStateOf(UploadTaskStatus.Pending))
 }
 
-fun Bucket.toBasicInfo(): BucketBasicInfo {
-    return BucketBasicInfo(this.name(), this.creationDate().toString())
+fun Bucket.toBasicInfo(publicURL: String?): BucketBasicInfo {
+    return BucketBasicInfo(this.name(), this.creationDate().toString(), publicURL)
 }
 
 fun Route.Main.toAPIConfiguration(): APIConfiguration {
