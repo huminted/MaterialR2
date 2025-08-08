@@ -1,3 +1,6 @@
+![App Screenshot 1](doc/screenshot_2.png)
+![App Screenshot 2](doc/screenshot_1.png)
+
 # MaterialR2
 
 MaterialR2 is a modern R2 cloud storage client application built with Material Design 3 principles. Developed using
