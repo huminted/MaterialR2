@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cn.iwakeup.r2client.APP_NAME
 import cn.iwakeup.r2client.data.BucketBasicInfo
 import cn.iwakeup.r2client.ui.theme.AppTheme
 import com.iwakeup.r2client.data.BucketFullInfo
@@ -62,7 +63,7 @@ fun BucketScreen(bucketBasicInfoList: List<BucketBasicInfo>, bucketViewModel: Bu
         ) {
             if (selectedBucket == null) {
                 Text(
-                    text = "Material R2",
+                    text = APP_NAME,
                     fontSize = 40.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = AppTheme.colors.secondaryContainer

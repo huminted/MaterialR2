@@ -7,7 +7,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import cn.iwakeup.r2client.ui.App
 
-const val APP_NAME = "MaterialR2"
+const val APP_NAME = "Material R2"
 
 fun main() = application {
     val windowState = rememberWindowState(size = DpSize(1200.dp, 800.dp))

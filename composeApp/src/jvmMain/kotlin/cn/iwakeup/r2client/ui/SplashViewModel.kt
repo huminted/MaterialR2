@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 sealed class SplashUIState {
     object Initiating : SplashUIState()
     object FreshInstall : SplashUIState()
-    data class InitiatedFail(val reason: String) : SplashUIState()
+    data class InitiatedFail(val reason: String, val apiConfiguration: APIConfiguration) : SplashUIState()
     data class InitiatedSuccess(val appConfig: AppConfig, val needSetupBucketPublicURL: Boolean) : SplashUIState()
 }
 
@@ -83,7 +83,7 @@ class SplashViewModel : ViewModel() {
 
 
             } catch (e: Exception) {
-                _splashUIState.emit(SplashUIState.InitiatedFail(e.message.toString()))
+                _splashUIState.emit(SplashUIState.InitiatedFail(e.message.toString(), configuration))
             }
 
         }

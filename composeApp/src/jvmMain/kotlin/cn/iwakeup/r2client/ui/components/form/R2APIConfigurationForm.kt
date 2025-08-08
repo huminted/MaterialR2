@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cn.iwakeup.r2client.data.APIConfiguration
+import cn.iwakeup.r2client.isSame
 
 
 @Composable
@@ -22,11 +23,19 @@ fun R2APIConfigurationForm(
     val accessKeyState = rememberTextFieldState(initialText = apiConfiguration.accessKey)
     val secretKeyState = rememberTextFieldState(initialText = apiConfiguration.secretKey)
 
+
+
     Column(modifier) {
         R2APIConfigurationForm(
             accountIdState,
             accessKeyState,
-            secretKeyState,
+            secretKeyState, {
+                apiConfiguration.isSame(
+                    accountIdState.text.toString(),
+                    accessKeyState.text.toString(),
+                    secretKeyState.text.toString()
+                )
+            },
             onSave
         )
     }
@@ -38,6 +47,7 @@ fun R2APIConfigurationForm(
     accountIdState: TextFieldState,
     accessKeyState: TextFieldState,
     secretKeyState: TextFieldState,
+    saveButtonEnabled: () -> Boolean,
     onSave: (APIConfiguration) -> Unit
 ) {
     Column(
@@ -67,7 +77,7 @@ fun R2APIConfigurationForm(
                     secretKeyState.text.toString()
                 )
             )
-        }) {
+        }, enabled = saveButtonEnabled()) {
             Text("Save")
         }
     }

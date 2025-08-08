@@ -16,23 +16,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cn.iwakeup.r2client.data.APIConfiguration
 import cn.iwakeup.r2client.data.AppConfig
+import cn.iwakeup.r2client.isSame
 import cn.iwakeup.r2client.ui.SplashUIState
 import cn.iwakeup.r2client.ui.SplashViewModel
-import cn.iwakeup.r2client.ui.components.form.BucketConfigurationInitialForm
 import cn.iwakeup.r2client.ui.components.InitialLoadingIndicator
+import cn.iwakeup.r2client.ui.components.form.BucketConfigurationInitialForm
 import cn.iwakeup.r2client.ui.components.form.R2APIConfigurationForm
 
 
 @Composable
 fun SplashScreen(
     freshInitialization: Boolean,
-    apiConfiguration: APIConfiguration, onInitiatedSuccess: (AppConfig) -> Unit
+    unCheckedApiConfiguration: APIConfiguration, onInitiatedSuccess: (AppConfig) -> Unit
 ) {
     val splashViewModel = remember { SplashViewModel() }
 
-    val accountIdState = rememberTextFieldState(initialText = apiConfiguration.accountId)
-    val accessKeyState = rememberTextFieldState(initialText = apiConfiguration.accessKey)
-    val secretKeyState = rememberTextFieldState(initialText = apiConfiguration.secretKey)
 
     val appUIState by splashViewModel.splashUIState.collectAsStateWithLifecycle()
 
@@ -41,7 +39,7 @@ fun SplashScreen(
         if (freshInitialization) {
             splashViewModel.initR2ClientForFreshLaunch()
         } else {
-            splashViewModel.refreshR2ClientConfiguration(apiConfiguration)
+            splashViewModel.refreshR2ClientConfiguration(unCheckedApiConfiguration)
         }
     }
 
@@ -55,7 +53,11 @@ fun SplashScreen(
         SplashUIState.FreshInstall -> {
             Column {
                 Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化设置")
-                APIConfigurationForm(accountIdState, accessKeyState, secretKeyState) {
+                APIConfigurationForm(
+                    rememberTextFieldState(),
+                    rememberTextFieldState(),
+                    rememberTextFieldState(),
+                    { true }) {
                     splashViewModel.saveAPIConfiguration(it)
                 }
             }
@@ -63,10 +65,20 @@ fun SplashScreen(
         }
 
         is SplashUIState.InitiatedFail -> {
-            val railReason = appUIState as SplashUIState.InitiatedFail
+            val frailReason = appUIState as SplashUIState.InitiatedFail
+            val failAPIConfiguration = frailReason.apiConfiguration
             Column {
-                Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化失败:${railReason.reason}")
-                APIConfigurationForm(accountIdState, accessKeyState, secretKeyState) {
+                val accountIdState = rememberTextFieldState(initialText = failAPIConfiguration.accountId)
+                val accessKeyState = rememberTextFieldState(initialText = failAPIConfiguration.accessKey)
+                val secretKeyState = rememberTextFieldState(initialText = failAPIConfiguration.secretKey)
+                Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化失败:${frailReason.reason}")
+                APIConfigurationForm(accountIdState, accessKeyState, secretKeyState, {
+                    failAPIConfiguration.isSame(
+                        accountIdState.text.toString(),
+                        accessKeyState.text.toString(),
+                        secretKeyState.text.toString()
+                    )
+                }) {
                     splashViewModel.saveAPIConfiguration(it)
                 }
             }
@@ -94,9 +106,10 @@ private fun APIConfigurationForm(
     accountIdState: TextFieldState,
     accessKeyState: TextFieldState,
     secretKeyState: TextFieldState,
+    saveButtonEnabled: () -> Boolean,
     onSave: (APIConfiguration) -> Unit
 ) {
     Box(Modifier.padding(15.dp)) {
-        R2APIConfigurationForm(accountIdState, accessKeyState, secretKeyState, onSave)
+        R2APIConfigurationForm(accountIdState, accessKeyState, secretKeyState, saveButtonEnabled, onSave)
     }
 }
