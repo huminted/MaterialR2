@@ -2,7 +2,6 @@ package cn.iwakeup.r2client.ui.screens.bucket
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,14 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cn.iwakeup.r2client.data.BucketBasicInfo
-import cn.iwakeup.r2client.resource.Res
-import cn.iwakeup.r2client.resource.test
-
 import cn.iwakeup.r2client.ui.theme.AppTheme
 import com.iwakeup.r2client.data.BucketFullInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.compose.resources.painterResource
 import software.amazon.awssdk.services.s3.model.S3Object
 
 
@@ -63,15 +58,15 @@ fun BucketScreen(bucketBasicInfoList: List<BucketBasicInfo>, bucketViewModel: Bu
 
         Box(
             Modifier.weight(0.8f).fillMaxHeight().background(AppTheme.colors.surfaceContainerLow),
+            contentAlignment = Alignment.Center
         ) {
             if (selectedBucket == null) {
-                Text("共${bucketBasicInfoList.size}个 Buckets")
-                Image(
-                    painter = painterResource(Res.drawable.test),
-                    contentDescription = "描述文字",
-                    modifier = Modifier.size(200.dp)
+                Text(
+                    text = "Material R2",
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = AppTheme.colors.secondaryContainer
                 )
-
             } else {
                 val curBucket = selectedBucket!!
 
@@ -99,7 +94,7 @@ private fun BucketObjectList(
 ) {
 
     val objects = bucketBasicInfo.objects
-    LazyColumn(Modifier.fillMaxWidth()) {
+    LazyColumn(Modifier.fillMaxSize()) {
 
         stickyHeader {
             BucketObjectListHeader(bucketBasicInfo)
