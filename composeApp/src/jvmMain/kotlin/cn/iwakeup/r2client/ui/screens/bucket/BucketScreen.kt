@@ -1,6 +1,6 @@
 package cn.iwakeup.r2client.ui.screens.bucket
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,33 +26,38 @@ import cn.iwakeup.r2client.data.BucketBasicInfo
 import cn.iwakeup.r2client.ui.theme.AppTheme
 import com.iwakeup.r2client.data.BucketFullInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import software.amazon.awssdk.services.s3.model.S3Object
 
 
 @Composable
 fun BucketScreen(bucketBasicInfoList: List<BucketBasicInfo>, bucketViewModel: BucketViewModel) {
-    var isExpanded by remember { mutableStateOf(false) }
 
-    val sideListWeight by animateFloatAsState(
-        targetValue = if (isExpanded) 0.16f else 0.001f,
-        animationSpec = tween(durationMillis = 200),
-        label = "rail_width"
-    )
+
+    val offsetX = remember { Animatable(-200f) }
+
+    LaunchedEffect(Unit) {
+        offsetX.animateTo(
+            targetValue = 0f,
+            animationSpec = tween(durationMillis = 200)
+        )
+    }
 
     val uiState by bucketViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(bucketBasicInfoList) {
-        isExpanded = true
         withContext(Dispatchers.IO) {
             bucketViewModel.getBucketsInfo(bucketBasicInfoList)
+            delay(500)
         }
     }
 
     var selectedBucket by remember { mutableStateOf<BucketFullInfo?>(null) }
     Row {
-        BucketsSideList(
-            Modifier.weight(sideListWeight).background(AppTheme.colors.surfaceContainerLow),
+
+        BucketsSideList(Modifier.weight(0.2f).offset { IntOffset(offsetX.value.toInt(), 0) }
+            .background(AppTheme.colors.surfaceContainerLow),
             uiState.bucketFullInfoList
         ) {
             selectedBucket = it

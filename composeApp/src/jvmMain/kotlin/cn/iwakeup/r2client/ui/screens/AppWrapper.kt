@@ -3,13 +3,18 @@ package cn.iwakeup.r2client.ui.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToDrive
 import androidx.compose.material.icons.filled.Bento
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,10 +23,7 @@ import cn.iwakeup.r2client.data.APIConfiguration
 import cn.iwakeup.r2client.ui.components.InitialLoadingIndicator
 import cn.iwakeup.r2client.ui.components.NavigationRailComponent
 import cn.iwakeup.r2client.ui.components.NavigationRailItemData
-import cn.iwakeup.r2client.ui.routes.BucketRoute
-import cn.iwakeup.r2client.ui.routes.Route
-import cn.iwakeup.r2client.ui.routes.SettingRoute
-import cn.iwakeup.r2client.ui.routes.UploadRoute
+import cn.iwakeup.r2client.ui.routes.*
 import cn.iwakeup.r2client.ui.screens.bucket.BucketViewModel
 import cn.iwakeup.r2client.ui.screens.upload.UploadViewModel
 
@@ -62,7 +64,19 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
 
             val buckets = (uiState as AppWrapperUIState.Success).buckets
             Row(modifier = Modifier.fillMaxSize()) {
-                NavigationRailComponent(navigationItems, selectedPage) { it ->
+                NavigationRailComponent(navigationItems, selectedPage, {
+                    FloatingActionButton(
+                        elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                        onClick = {
+                            val searchRoute = Route.Search("")
+                            navController.navigate(searchRoute)
+                            selectedPage = searchRoute
+
+                        },
+                    ) {
+                        Icon(Icons.Filled.Search, "Floating action button.")
+                    }
+                }) {
                     selectedPage = it
                     navController.navigate(selectedPage)
                 }
@@ -70,6 +84,7 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
                     composable<Route.Upload> { UploadRoute(buckets, uploadViewModel) }
                     composable<Route.Bucket> { BucketRoute(buckets, bucketViewModel) }
                     composable<Route.Setting> { SettingRoute(apiConfiguration, buckets, onSave) }
+                    composable<Route.Search> { SearchRoute(it, appWrapperViewModel.loadedBuckets) }
                 }
             }
 

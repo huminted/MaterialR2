@@ -103,6 +103,31 @@ class R2Client(private val s3Client: S3Client) {
 
     }
 
+
+    fun searchObject(bucket: String, key: String): List<S3Object> {
+        val objectList = mutableListOf<S3Object>()
+        var continuationToken: String? = null
+
+        do {
+            val requestBuilder = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(key)
+                .maxKeys(1000)
+
+            if (continuationToken != null) {
+                requestBuilder.continuationToken(continuationToken)
+            }
+
+            val response: ListObjectsV2Response = s3Client.listObjectsV2(requestBuilder.build())
+
+            objectList.addAll(response.contents())
+
+            continuationToken = if (response.isTruncated) response.nextContinuationToken() else null
+        } while (continuationToken != null)
+
+        return objectList
+    }
+
     companion object Companion {
         private const val CDN_BASE_URL = "https://cdn.piggy.iwakeup.cn/"
         private var instance: R2Client? = null

@@ -9,7 +9,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ data class NavigationRailItemData(val text: String, val icon: ImageVector, val r
 fun NavigationRailComponent(
     items: List<NavigationRailItemData>,
     selectedPage: Route.RouteScreen,
+    header: @Composable () -> Unit,
     onNavItemChange: (selectedPage: Route.RouteScreen) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(true) }
@@ -66,12 +66,7 @@ fun NavigationRailComponent(
                             contentDescription = "切换展开"
                         )
                     }
-                    FloatingActionButton(
-                        elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                        onClick = { },
-                    ) {
-                        Icon(Icons.Filled.Search, "Floating action button.")
-                    }
+                    header()
                     Spacer(Modifier.height(100.dp))
                 }
             }

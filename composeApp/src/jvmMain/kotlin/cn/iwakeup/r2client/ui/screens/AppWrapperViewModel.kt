@@ -1,5 +1,7 @@
 package cn.iwakeup.r2client.ui.screens
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.iwakeup.r2client.data.BucketBasicInfo
@@ -22,9 +24,13 @@ sealed interface AppWrapperUIState {
 
 class AppWrapperViewModel : ViewModel() {
     val preferenceRepository = PreferenceRepository(PreferencesDataStore.instance)
-    
+
     private val _uiStat = MutableStateFlow<AppWrapperUIState>(AppWrapperUIState.Loading)
     val uiState: StateFlow<AppWrapperUIState> = _uiStat
+
+
+    private val _loadedBuckets = mutableStateListOf<BucketBasicInfo>()
+    val loadedBuckets: SnapshotStateList<BucketBasicInfo> = _loadedBuckets
 
 
     fun loadBuckets() {
@@ -35,6 +41,10 @@ class AppWrapperViewModel : ViewModel() {
             preferenceRepository.getBucketsPublicURL(buckets).collect { urls ->
                 val basicBuckets = buckets.mapIndexed { index, rawBucket ->
                     rawBucket.toBasicInfo(urls[index])
+                }
+                _loadedBuckets.apply {
+                    clear()
+                    _loadedBuckets.addAll(basicBuckets)
                 }
                 _uiStat.emit(AppWrapperUIState.Success(basicBuckets))
             }

@@ -2,7 +2,7 @@ package cn.iwakeup.r2client.ui.routes
 
 import kotlinx.serialization.Serializable
 
-
+@Serializable
 sealed class Route {
     @Serializable
     open class RouteScreen
@@ -31,4 +31,7 @@ sealed class Route {
 
     @Serializable
     object Setting : RouteScreen()
+
+    @Serializable
+    data class Search(val bucketName: String) : RouteScreen()
 }
