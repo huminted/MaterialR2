@@ -1,11 +1,13 @@
-![App Screenshot 1](doc/screenshot_2.png)
-![App Screenshot 2](doc/screenshot_1.png)
+<img src="composeApp/src/commonMain/composeResources/drawable/icon.png" alt="Project Logo" width="160">
 
 # MaterialR2
 
 MaterialR2 is a modern R2 cloud storage client application built with Material Design 3 principles. Developed using
 Kotlin and Jetpack Compose for Desktop, it provides an elegant and feature-rich interface for managing R2 cloud storage
-services.
+
+![App Screenshot 1](doc/screenshot_1.png)
+![App Screenshot 2](doc/screenshot_3.png)
+![App Screenshot 3](doc/screenshot_2.png)
 
 ## Key Features
 

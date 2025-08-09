@@ -129,7 +129,6 @@ class R2Client(private val s3Client: S3Client) {
     }
 
     companion object Companion {
-        private const val CDN_BASE_URL = "https://cdn.piggy.iwakeup.cn/"
         private var instance: R2Client? = null
 
         fun init(accountId: String, accessKey: String, secretKey: String): List<Bucket> {

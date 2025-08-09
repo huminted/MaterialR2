@@ -45,8 +45,7 @@ class UploadViewModel : ViewModel() {
         if (file.isFile) {
             _fileList.add(file.toUploadTask().stateOf())
         } else if (file.isDirectory) {
-            val filesInDir = file.listFiles().map { it.toUploadTask().stateOf() }.toList()
-            // todo 增加对嵌套文件夹的处理
+            val filesInDir = SystemToolkit.listAllFilesInFolder(file).map { it.toUploadTask().stateOf() }.toList()
             _fileList.addAll(filesInDir)
         }
 
