@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package cn.iwakeup.r2client.ui.components
 
 import androidx.compose.animation.animateContentSize
@@ -63,7 +65,7 @@ fun NavigationRailComponent(
                                 Icons.AutoMirrored.Default.MenuOpen
                             else
                                 Icons.Default.Menu,
-                            contentDescription = "切换展开"
+                            contentDescription = "Toggle expand"
                         )
                     }
                     header()

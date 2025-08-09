@@ -56,7 +56,7 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
     when (uiState) {
         AppWrapperUIState.Loading -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                InitialLoadingIndicator(loadingHintText = "获取Buckets中...")
+                InitialLoadingIndicator(loadingHintText = "Fetching buckets")
             }
         }
 

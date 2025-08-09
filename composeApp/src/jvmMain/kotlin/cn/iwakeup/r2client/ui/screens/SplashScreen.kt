@@ -47,12 +47,12 @@ fun SplashScreen(
 
     when (appUIState) {
         SplashUIState.Initiating -> {
-            InitialLoadingIndicator(Modifier.fillMaxSize(), "初始化中")
+            InitialLoadingIndicator(Modifier.fillMaxSize(), "Initializing")
         }
 
         SplashUIState.FreshInstall -> {
             Column {
-                Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化设置")
+                Text(modifier = Modifier.padding(15.dp), text = "R2 API Initial Setup")
                 APIConfigurationForm(
                     rememberTextFieldState(),
                     rememberTextFieldState(),
@@ -71,7 +71,7 @@ fun SplashScreen(
                 val accountIdState = rememberTextFieldState(initialText = failAPIConfiguration.accountId)
                 val accessKeyState = rememberTextFieldState(initialText = failAPIConfiguration.accessKey)
                 val secretKeyState = rememberTextFieldState(initialText = failAPIConfiguration.secretKey)
-                Text(modifier = Modifier.padding(15.dp), text = "R2 API 初始化失败:${frailReason.reason}")
+                Text(modifier = Modifier.padding(15.dp), text = "R2 API initialization failed:${frailReason.reason}")
                 APIConfigurationForm(accountIdState, accessKeyState, secretKeyState, {
                     failAPIConfiguration.isSame(
                         accountIdState.text.toString(),
