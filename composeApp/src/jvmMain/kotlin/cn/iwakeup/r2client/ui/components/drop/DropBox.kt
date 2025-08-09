@@ -6,12 +6,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Outbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cn.iwakeup.r2client.data.BucketBasicInfo
 import cn.iwakeup.r2client.ui.theme.AppTheme
@@ -60,11 +65,23 @@ private fun DropBox(
             .padding(24.dp)
             .dragAndDropTarget({ true }, fileDropTarget),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
     ) {
-        Text("文件拖拽到此处 并选择Bucket", color = AppTheme.colors.onSecondaryContainer)
+
+        Icon(imageVector = Icons.Rounded.Outbox, contentDescription = "", Modifier.size(40.dp))
+        Text(
+            "Drag and drop a file or folder to upload",
+            color = AppTheme.colors.onSecondaryContainer,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(
+            modifier = Modifier.alpha(0.5f),
+            text = "and, choose a bucket using dropdown menu below",
+            color = AppTheme.colors.onSecondaryFixed,
+        )
+        Spacer(Modifier.height(10.dp))
         BucketDropdownMenu(buckets, selectedBucket, onSelectedChange)
-        droppedFile?.let { Text(it.absolutePath, color = AppTheme.colors.onSecondaryContainer) }
+//        droppedFile?.let { Text(it.absolutePath, color = AppTheme.colors.onSecondaryContainer) }
     }
 
 }

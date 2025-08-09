@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
-
 kotlin {
     jvm()
     sourceSets {
@@ -26,7 +25,7 @@ kotlin {
             implementation(libs.compose.material3.adaptive)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
-
+            implementation("org.jetbrains.compose.material3:material3:1.9.0-alpha04")
             implementation(libs.androidx.datastore)
             implementation(libs.androidx.datastore.preferences)
 
@@ -56,6 +55,7 @@ compose.desktop {
             modules("java.instrument", "java.management", "jdk.unsupported", "java.naming")
 
             macOS {
+                iconFile.set(file("src/commonMain/composeResources/drawable/launch_icon.icns"))
                 buildTypes.release { proguard { isEnabled = false } }
             }
         }

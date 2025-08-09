@@ -1,5 +1,6 @@
 package cn.iwakeup.r2client.ui.screens.search
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -25,9 +27,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cn.iwakeup.r2client.APP_NAME
 import cn.iwakeup.r2client.data.BucketBasicInfo
+import cn.iwakeup.r2client.resource.Res
+import cn.iwakeup.r2client.resource.icon
 import cn.iwakeup.r2client.ui.components.EmptyStatus
 import cn.iwakeup.r2client.ui.components.InitialLoadingIndicator
 import cn.iwakeup.r2client.ui.theme.AppTheme
+import org.jetbrains.compose.resources.painterResource
 import software.amazon.awssdk.services.s3.model.S3Object
 
 
@@ -119,6 +124,12 @@ fun SimpleSearchBar(
     Box(
         modifier.semantics { isTraversalGroup = true }
     ) {
+
+        Image(
+            modifier = Modifier.align(Alignment.BottomEnd).padding(80.dp).alpha(0.1f),
+            painter = painterResource(Res.drawable.icon),
+            contentDescription = ""
+        )
 
         Text(
             modifier = Modifier.align(Alignment.Center).padding(bottom = 120.dp), text = APP_NAME,

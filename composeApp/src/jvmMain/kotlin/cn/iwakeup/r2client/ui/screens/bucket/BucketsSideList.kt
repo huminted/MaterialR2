@@ -27,7 +27,7 @@ fun BucketsSideList(
     var selectedIndex by remember { mutableStateOf(-1) }
 
     Row(modifier) {
-        LazyColumn(modifier.padding(10.dp)) {
+        LazyColumn(modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
 
             stickyHeader {
                 BucketListHeader(buckets.size.toString())
@@ -69,8 +69,9 @@ fun BucketItem(bucket: BucketFullInfo, checked: Boolean, onClick: () -> Unit) {
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Text(
-                modifier = Modifier.padding(start = 10.dp).wrapContentWidth(Alignment.Start),
-                color = AppTheme.colors.onSecondaryContainer,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp).wrapContentWidth(Alignment.Start),
+                fontWeight = FontWeight.SemiBold,
+                color = AppTheme.colors.scrim,
                 minLines = 1,
                 text = bucket.bucketName
             )

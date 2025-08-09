@@ -32,7 +32,7 @@ fun BucketDropdownMenu(
         },
     ) {
         Text(
-            modifier = Modifier.padding(start = 10.dp),
+            modifier = Modifier.padding(start = 4.dp),
             text = selectedBucket.bucketName,
             color = AppTheme.colors.onSecondaryContainer
         )

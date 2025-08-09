@@ -7,6 +7,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cn.iwakeup.r2client.ui.components.DownloadProgressIndicator
+import cn.iwakeup.r2client.ui.theme.AppTheme
 import java.io.File
 
 
@@ -50,10 +52,21 @@ fun UploadFileItem(
 ) {
     val file = uploadTask.task.file
 
+
     Row(Modifier.padding(vertical = 4.dp)) {
         Column(Modifier.weight(0.9f)) {
-            Text(fontWeight = FontWeight.SemiBold, text = file.name)
-            Spacer(Modifier.height(2.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(fontWeight = FontWeight.SemiBold, text = file.name)
+                if (uploadTask.status.value == UploadTaskStatus.Finished) {
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        "done",
+                        Modifier.size(15.dp),
+                        tint = AppTheme.colors.onSecondaryContainer
+                    )
+                }
+            }
+            Spacer(Modifier.height(4.dp))
             Text(file.absolutePath, fontSize = 11.sp)
             DownloadProgressIndicator(uploadTask.process.value, uploadTask.status.value)
 

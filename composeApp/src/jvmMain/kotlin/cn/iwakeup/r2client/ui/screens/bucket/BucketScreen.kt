@@ -5,17 +5,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -101,7 +103,7 @@ private fun BucketObjectList(
 ) {
 
     val objects = bucketBasicInfo.objects
-    LazyColumn(Modifier.fillMaxSize()) {
+    LazyColumn(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
         stickyHeader {
             BucketObjectListHeader(bucketBasicInfo)
@@ -116,17 +118,30 @@ private fun BucketObjectList(
 
 @Composable
 fun BucketObjectListHeader(bucketBasicInfo: BucketFullInfo) {
-    Column(
-        Modifier.background(AppTheme.colors.surfaceContainerLow).fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
-    ) {
-        Text(text = "Object List", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
 
-        if (bucketBasicInfo.publicURL.isNullOrEmpty()) {
-            Text("未配置Public URL,无法拷贝链接", color = AppTheme.colors.error, fontSize = 11.sp)
-        } else {
-            Text(bucketBasicInfo.publicURL.toString(), color = AppTheme.colors.onSecondaryContainer, fontSize = 11.sp)
+    Surface(
+        color = Color.White,
+        tonalElevation = 8.dp,  // Material 3 的阴影
+        shadowElevation = 2.dp, // 控制物理阴影（可选，Compose 1.5+）
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            Modifier.background(AppTheme.colors.surfaceContainerLow).padding(vertical = 20.dp, horizontal = 20.dp)
+                .fillMaxWidth(),
+
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(text = "Object List", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+
+            if (bucketBasicInfo.publicURL.isNullOrEmpty()) {
+                Text("未配置Public URL,无法拷贝链接", color = AppTheme.colors.error, fontSize = 11.sp)
+            } else {
+                Text(
+                    bucketBasicInfo.publicURL.toString(),
+                    color = AppTheme.colors.onSecondaryContainer,
+                    fontSize = 11.sp
+                )
+            }
         }
     }
 }
@@ -139,32 +154,43 @@ private fun ObjectItem(
     onCopyLink: (String) -> Unit,
     onDeleteObject: (String) -> Unit
 ) {
-    Row(
-        modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+
+    Surface(
+        Modifier.padding(horizontal = 10.dp),
+        shape = RoundedCornerShape(10.dp)
     ) {
-        Icon(imageVector = Icons.Default.PictureAsPdf, contentDescription = "")
-        Column(Modifier.weight(1f)) {
-            Text(s3Object.key())
-            Text(text = s3Object.lastModified().toString(), fontSize = 11.sp, color = AppTheme.colors.outline)
-        }
-        IconButton(onClick = { onCopyLink(s3Object.key()) }, enabled = enableCopyLink) {
+        Row(
+            Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Spacer(Modifier.width(4.dp))
             Icon(
-                modifier = Modifier.align(Alignment.Top),
-                imageVector = Icons.Default.Link,
-                contentDescription = "Link"
+                imageVector = Icons.Default.PictureAsPdf,
+                contentDescription = "",
+                tint = AppTheme.colors.primary
             )
-        }
-        IconButton(onClick = { onDeleteObject(s3Object.key()) }) {
-            Icon(
-                modifier = Modifier.align(Alignment.Top),
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Link"
-            )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(s3Object.key())
+                Text(text = s3Object.lastModified().toString(), fontSize = 11.sp, color = AppTheme.colors.outline)
+            }
+            IconButton(onClick = { onCopyLink(s3Object.key()) }, enabled = enableCopyLink) {
+                Icon(
+                    modifier = Modifier.align(Alignment.Top).size(20.dp),
+                    imageVector = Icons.Default.Link,
+                    contentDescription = "Link"
+                )
+            }
+            IconButton(onClick = { onDeleteObject(s3Object.key()) }) {
+                Icon(
+                    modifier = Modifier.align(Alignment.Top).size(20.dp),
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Link"
+                )
+            }
         }
     }
-    HorizontalDivider(modifier = Modifier.padding(horizontal = 20.dp), thickness = 1.dp)
 }
 
 
