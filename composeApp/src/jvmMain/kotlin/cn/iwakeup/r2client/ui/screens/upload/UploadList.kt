@@ -1,5 +1,6 @@
 package cn.iwakeup.r2client.ui.screens.upload
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
@@ -33,6 +34,7 @@ fun UploadList(
             val uploadTask = fileList[it]
             val enableCopy = uploadTask.status.value == UploadTaskStatus.Finished && bucketHasPublicURL()
             UploadFileItem(
+                modifier = Modifier.animateItem(tween()),
                 enableCopy,
                 uploadTask,
                 onCopyLink = onCopyLink,
@@ -45,6 +47,7 @@ fun UploadList(
 
 @Composable
 fun UploadFileItem(
+    modifier: Modifier = Modifier,
     enableCopy: Boolean,
     uploadTask: UploadTaskUIState,
     onRemoveItem: ((File) -> Unit)? = null,
@@ -53,7 +56,7 @@ fun UploadFileItem(
     val file = uploadTask.task.file
 
 
-    Row(Modifier.padding(vertical = 4.dp)) {
+    Row(modifier.padding(vertical = 4.dp)) {
         Column(Modifier.weight(0.9f)) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(fontWeight = FontWeight.SemiBold, text = file.name)

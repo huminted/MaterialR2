@@ -1,5 +1,8 @@
 package cn.iwakeup.r2client.ui.screens
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -80,7 +83,15 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
                     selectedPage = it
                     navController.navigate(selectedPage)
                 }
-                NavHost(navController = navController, startDestination = Route.Upload) {
+                NavHost(
+                    navController = navController, startDestination = Route.Upload,
+                    enterTransition = {
+                        fadeIn(animationSpec = tween(300))
+                    },
+                    exitTransition = {
+                        fadeOut(animationSpec = tween(300))
+                    },
+                ) {
                     composable<Route.Upload> { UploadRoute(buckets, uploadViewModel) }
                     composable<Route.Bucket> { BucketRoute(buckets, bucketViewModel) }
                     composable<Route.Setting> { SettingRoute(apiConfiguration, buckets, onSave) }
