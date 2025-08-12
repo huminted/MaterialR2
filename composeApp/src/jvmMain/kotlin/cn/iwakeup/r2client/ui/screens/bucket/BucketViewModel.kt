@@ -1,6 +1,8 @@
 package cn.iwakeup.r2client.ui.screens.bucket
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import cn.iwakeup.r2client.data.BucketBasicInfo
 import cn.iwakeup.r2client.domain.SystemToolkit
 import com.iwakeup.r2client.api.R2Client
@@ -9,8 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
+import kotlin.reflect.KClass
 
 
+@Suppress("UNCHECKED_CAST")
 class BucketViewModel() : ViewModel() {
 
 
@@ -54,5 +58,14 @@ class BucketViewModel() : ViewModel() {
 
     }
 
+
+    companion object Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(
+            modelClass: KClass<T>,
+            extras: CreationExtras
+        ): T {
+            return BucketViewModel() as T
+        }
+    }
 
 }

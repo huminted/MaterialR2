@@ -1,6 +1,7 @@
 package cn.iwakeup.r2client.ui
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -10,6 +11,7 @@ import cn.iwakeup.r2client.toMainRoute
 import cn.iwakeup.r2client.toSplashRoute
 import cn.iwakeup.r2client.ui.routes.Route
 import cn.iwakeup.r2client.ui.screens.AppWrapper
+import cn.iwakeup.r2client.ui.screens.AppWrapperViewModel
 import cn.iwakeup.r2client.ui.screens.SplashScreen
 import cn.iwakeup.r2client.ui.theme.AppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -20,7 +22,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     val navController = rememberNavController()
 
-//    SearchScreen("", "")
     AppTheme {
         NavHost(
             navController = navController,
@@ -28,7 +29,13 @@ fun App() {
         ) {
             composable<Route.Splash> {
                 val routeSplash: Route.Splash = it.toRoute()
-                SplashScreen(routeSplash.freshInitialization, routeSplash.toAPIConfiguration()) { appConfig ->
+                val splashViewModel: SplashViewModel =
+                    viewModel(viewModelStoreOwner = it, factory = SplashViewModel.Factory)
+                SplashScreen(
+                    splashViewModel,
+                    routeSplash.freshInitialization,
+                    routeSplash.toAPIConfiguration()
+                ) { appConfig ->
                     navController.navigate(appConfig.apiConfiguration.toMainRoute())
                 }
 
@@ -36,7 +43,9 @@ fun App() {
             }
             composable<Route.Main> {
                 val routeData: Route.Main = it.toRoute()
-                AppWrapper(routeData.toAPIConfiguration()) { newAPIConfiguration ->
+                val appWrapperViewModel: AppWrapperViewModel =
+                    viewModel(viewModelStoreOwner = it, factory = AppWrapperViewModel.Factory)
+                AppWrapper(appWrapperViewModel, routeData.toAPIConfiguration()) { newAPIConfiguration ->
                     navController.navigate(newAPIConfiguration.toSplashRoute(false))
                 }
             }

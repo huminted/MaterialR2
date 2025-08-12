@@ -9,8 +9,8 @@ import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,25 +20,28 @@ import cn.iwakeup.r2client.ui.components.drop.DropComponent
 
 @Composable
 fun UploadScreen(bucketBasicInfoList: List<BucketBasicInfo>, viewModel: UploadViewModel) {
-    val fileState = remember { viewModel.fileState }
-    val fileList = remember { viewModel.fileList }
 
-    val selectedBucket by remember { viewModel.selectedBucket }
+    val selectedBucket by viewModel.selectedBucket
 
-    if (selectedBucket == null) {
-        bucketBasicInfoList.getOrNull(0)?.let {
-            viewModel.selectBucket(it)
+    LaunchedEffect(Unit) {
+        if (selectedBucket == null) {
+            bucketBasicInfoList.getOrNull(0)?.let {
+                viewModel.selectBucket(it)
+            }
         }
-    } else {
+    }
+
+
+    if (selectedBucket != null) {
         Box(modifier = Modifier.padding(20.dp).fillMaxSize()) {
-            DropComponent(fileState.value, {
+            DropComponent(viewModel.fileState, {
                 viewModel.dropFile(it)
             }, bucketBasicInfoList, selectedBucket!!, {
                 viewModel.selectBucket(it)
             }) {
                 UploadList(
                     bucketHasPublicURL = { !selectedBucket?.publicURL.isNullOrEmpty() },
-                    fileList,
+                    viewModel.fileList,
                     onCopyLink = { file ->
                         selectedBucket?.publicURL?.let { viewModel.copyLink(it, file.name) }
                     },

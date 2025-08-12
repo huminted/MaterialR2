@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Outbox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -25,18 +26,17 @@ import java.io.File
 
 @Composable
 fun DropComponent(
-    file: File?, onDropFile: (droppedFile: File) -> Unit,
+    file: State<File?>, onDropFile: (droppedFile: File) -> Unit,
     buckets: List<BucketBasicInfo>,
     selectedBucket: BucketBasicInfo,
     onSelectedChange: (selectedBucket: BucketBasicInfo) -> Unit,
     fileList: @Composable () -> Unit
 ) {
-
     Column {
-        DropBox(file, { file ->
+        DropBox({ file ->
             onDropFile(file)
         }, buckets, selectedBucket, onSelectedChange)
-        file?.let {
+        file.value?.let {
             Spacer(Modifier.height(10.dp))
             fileList()
         }
@@ -45,7 +45,6 @@ fun DropComponent(
 
 @Composable
 private fun DropBox(
-    droppedFile: File?,
     onDropFile: (droppedFile: File) -> Unit,
     buckets: List<BucketBasicInfo>,
     selectedBucket: BucketBasicInfo,
@@ -81,7 +80,6 @@ private fun DropBox(
         )
         Spacer(Modifier.height(10.dp))
         BucketDropdownMenu(buckets, selectedBucket, onSelectedChange)
-//        droppedFile?.let { Text(it.absolutePath, color = AppTheme.colors.onSecondaryContainer) }
     }
 
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,20 +28,16 @@ import cn.iwakeup.r2client.ui.components.InitialLoadingIndicator
 import cn.iwakeup.r2client.ui.components.NavigationRailComponent
 import cn.iwakeup.r2client.ui.components.NavigationRailItemData
 import cn.iwakeup.r2client.ui.routes.*
-import cn.iwakeup.r2client.ui.screens.bucket.BucketViewModel
-import cn.iwakeup.r2client.ui.screens.upload.UploadViewModel
 
 
 @Composable
-fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: APIConfiguration) -> Unit) {
+fun AppWrapper(
+    appWrapperViewModel: AppWrapperViewModel,
+    apiConfiguration: APIConfiguration,
+    onSave: (apiConfiguration: APIConfiguration) -> Unit
+) {
     val navController = rememberNavController()
-    var selectedPage by remember { mutableStateOf(Route.RouteScreen()) }
-
-    val uploadViewModel = remember { UploadViewModel() }
-    val bucketViewModel = remember { BucketViewModel() }
-
-
-    val appWrapperViewModel = remember { AppWrapperViewModel() }
+    var selectedPage by remember { mutableStateOf<Route.RouteScreen>(Route.Search("")) }
 
     val uiState by appWrapperViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -81,7 +78,13 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
                     }
                 }) {
                     selectedPage = it
-                    navController.navigate(selectedPage)
+                    navController.navigate(it) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
                 NavHost(
                     navController = navController, startDestination = Route.Upload,
@@ -92,8 +95,8 @@ fun AppWrapper(apiConfiguration: APIConfiguration, onSave: (apiConfiguration: AP
                         fadeOut(animationSpec = tween(300))
                     },
                 ) {
-                    composable<Route.Upload> { UploadRoute(buckets, uploadViewModel) }
-                    composable<Route.Bucket> { BucketRoute(buckets, bucketViewModel) }
+                    composable<Route.Upload> { UploadRoute(it, buckets) }
+                    composable<Route.Bucket> { BucketRoute(it, buckets) }
                     composable<Route.Setting> { SettingRoute(apiConfiguration, buckets, onSave) }
                     composable<Route.Search> { SearchRoute(it, appWrapperViewModel.loadedBuckets) }
                 }

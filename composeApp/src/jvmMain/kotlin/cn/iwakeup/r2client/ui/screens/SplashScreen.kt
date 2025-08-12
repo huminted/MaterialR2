@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,10 +25,10 @@ import cn.iwakeup.r2client.ui.components.form.R2APIConfigurationForm
 
 @Composable
 fun SplashScreen(
+    splashViewModel: SplashViewModel,
     freshInitialization: Boolean,
     unCheckedApiConfiguration: APIConfiguration, onInitiatedSuccess: (AppConfig) -> Unit
 ) {
-    val splashViewModel = remember { SplashViewModel() }
 
 
     val appUIState by splashViewModel.splashUIState.collectAsStateWithLifecycle()

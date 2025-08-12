@@ -28,7 +28,6 @@ import cn.iwakeup.r2client.data.BucketBasicInfo
 import cn.iwakeup.r2client.ui.theme.AppTheme
 import com.iwakeup.r2client.data.BucketFullInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import software.amazon.awssdk.services.s3.model.S3Object
 
@@ -36,6 +35,7 @@ import software.amazon.awssdk.services.s3.model.S3Object
 @Composable
 fun BucketScreen(bucketBasicInfoList: List<BucketBasicInfo>, bucketViewModel: BucketViewModel) {
 
+    var selectedBucket by remember { mutableStateOf<BucketFullInfo?>(null) }
 
     val offsetX = remember { Animatable(-200f) }
 
@@ -51,13 +51,10 @@ fun BucketScreen(bucketBasicInfoList: List<BucketBasicInfo>, bucketViewModel: Bu
     LaunchedEffect(bucketBasicInfoList) {
         withContext(Dispatchers.IO) {
             bucketViewModel.getBucketsInfo(bucketBasicInfoList)
-            delay(500)
         }
     }
 
-    var selectedBucket by remember { mutableStateOf<BucketFullInfo?>(null) }
     Row {
-
         BucketsSideList(Modifier.weight(0.2f).offset { IntOffset(offsetX.value.toInt(), 0) }
             .background(AppTheme.colors.surfaceContainerLow),
             uiState.bucketFullInfoList
@@ -121,8 +118,8 @@ fun BucketObjectListHeader(bucketBasicInfo: BucketFullInfo) {
 
     Surface(
         color = Color.White,
-        tonalElevation = 8.dp,  // Material 3 的阴影
-        shadowElevation = 2.dp, // 控制物理阴影（可选，Compose 1.5+）
+        tonalElevation = 8.dp,
+        shadowElevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -134,7 +131,11 @@ fun BucketObjectListHeader(bucketBasicInfo: BucketFullInfo) {
             Text(text = "Object List", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
 
             if (bucketBasicInfo.publicURL.isNullOrEmpty()) {
-                Text("未配置Public URL,无法拷贝链接", color = AppTheme.colors.error, fontSize = 11.sp)
+                Text(
+                    "Public URL is not configured, the link cannot be copied.",
+                    color = AppTheme.colors.error,
+                    fontSize = 11.sp
+                )
             } else {
                 Text(
                     bucketBasicInfo.publicURL.toString(),

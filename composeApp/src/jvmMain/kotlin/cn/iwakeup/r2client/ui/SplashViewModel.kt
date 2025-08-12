@@ -2,7 +2,9 @@ package cn.iwakeup.r2client.ui
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import cn.iwakeup.r2client.data.APIConfiguration
 import cn.iwakeup.r2client.data.AppConfig
 import cn.iwakeup.r2client.data.PreferenceRepository
@@ -12,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 
 sealed class SplashUIState {
@@ -22,6 +25,7 @@ sealed class SplashUIState {
 }
 
 
+@Suppress("UNCHECKED_CAST")
 class SplashViewModel : ViewModel() {
 
     private val _splashUIState = MutableStateFlow<SplashUIState>(SplashUIState.Initiating)
@@ -95,5 +99,13 @@ class SplashViewModel : ViewModel() {
         }
     }
 
+    companion object Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(
+            modelClass: KClass<T>,
+            extras: CreationExtras
+        ): T {
+            return SplashViewModel() as T
+        }
+    }
 
 }
