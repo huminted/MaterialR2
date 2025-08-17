@@ -48,7 +48,7 @@ fun APIConfiguration.toSplashRoute(freshLaunch: Boolean): Route.Splash {
     return Route.Splash(freshLaunch, this.accountId, this.accessKey, this.secretKey)
 }
 
-fun APIConfiguration.isSame(accountId: String, accessKey: String, secretKey: String): Boolean {
+fun APIConfiguration.isNotSame(accountId: String, accessKey: String, secretKey: String): Boolean {
     return this.accountId != accountId
             || this.accessKey != accessKey
             || this.secretKey != secretKey

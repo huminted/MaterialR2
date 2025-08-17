@@ -31,8 +31,13 @@ kotlin {
 
 
         }
-        commonTest.dependencies {
+        jvmTest.dependencies {
             implementation(libs.kotlin.test)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+            implementation(compose.desktop.uiTestJUnit4)
+            implementation(compose.desktop.currentOs)
+
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

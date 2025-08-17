@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cn.iwakeup.r2client.data.APIConfiguration
 import cn.iwakeup.r2client.data.AppConfig
-import cn.iwakeup.r2client.isSame
+import cn.iwakeup.r2client.isNotSame
 import cn.iwakeup.r2client.ui.SplashUIState
 import cn.iwakeup.r2client.ui.SplashViewModel
 import cn.iwakeup.r2client.ui.components.InitialLoadingIndicator
@@ -72,7 +72,7 @@ fun SplashScreen(
                 val secretKeyState = rememberTextFieldState(initialText = failAPIConfiguration.secretKey)
                 Text(modifier = Modifier.padding(15.dp), text = "R2 API initialization failed:${frailReason.reason}")
                 APIConfigurationForm(accountIdState, accessKeyState, secretKeyState, {
-                    failAPIConfiguration.isSame(
+                    failAPIConfiguration.isNotSame(
                         accountIdState.text.toString(),
                         accessKeyState.text.toString(),
                         secretKeyState.text.toString()

@@ -44,7 +44,7 @@ fun DropComponent(
 }
 
 @Composable
-private fun DropBox(
+fun DropBox(
     onDropFile: (droppedFile: File) -> Unit,
     buckets: List<BucketBasicInfo>,
     selectedBucket: BucketBasicInfo,

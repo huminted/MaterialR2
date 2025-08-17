@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cn.iwakeup.r2client.data.APIConfiguration
-import cn.iwakeup.r2client.isSame
+import cn.iwakeup.r2client.isNotSame
 
 
 @Composable
@@ -30,7 +30,7 @@ fun R2APIConfigurationForm(
             accountIdState,
             accessKeyState,
             secretKeyState, {
-                apiConfiguration.isSame(
+                apiConfiguration.isNotSame(
                     accountIdState.text.toString(),
                     accessKeyState.text.toString(),
                     secretKeyState.text.toString()
